@@ -1,3 +1,4 @@
+// Задачи на логику
 /**
  1. Задача про монеты и весы
 
@@ -84,4 +85,61 @@
  Данная функция выводит необходимое количество попыток для каждого образца при нахождении критической высоты.
  Данная критическая высота нам неизвестна, для расчета можем использовать числа в диапазоне от 1 до 5000,
  она доказывает, что максимальное количество попыток не будет превышать 100.
+ */
+
+function getSafeHeight(criticalHeight) {
+    let sumHeight1 = 0; // накопительная высота по первому образцу
+    let sumHeight2 = 0; // накопительная высота по второму образцу
+    let stepModelOne = 0; // попытки 1 образец
+    let stepModelTwo = 0; // попытки 2 образец
+    // накопительная высота по первому образцу, сделал массивом, что бы можно было выдернуть предыдущий результат в цикле
+    let sumHeightArray = [];
+    let lastSafeHeight = 0; // последний элемент из массива из цикла первого образца
+    let totalStep = 0;
+
+    for (let i = 100; i >= 1; i--) {
+        if (sumHeight1 < criticalHeight) {
+            sumHeight1 += i;
+            stepModelOne++;
+            sumHeightArray.push(sumHeight1); // пушим значение высоты 1 образца при каждой попытке
+            lastSafeHeight = sumHeightArray[sumHeightArray.length - 2];
+            console.log(`Последняя безопасная высота ${lastSafeHeight}`);
+        } else {
+            break;
+        }
+    }
+    console.log(`Последняя безопасная высота ${lastSafeHeight}`);
+    if (lastSafeHeight) {
+        for (let j = lastSafeHeight; j <= criticalHeight; j++) {
+            sumHeight2 = lastSafeHeight++;
+            stepModelTwo++;
+        }
+    } else {
+        for (let j = 1; j <= criticalHeight; j++) {
+            sumHeight2++;
+            stepModelTwo++;
+        }
+    }
+    totalStep = stepModelOne + stepModelTwo;
+
+    console.log(`На какой высоте разбился первый образец: ${sumHeight1}`, `, попыток первого образца: ${stepModelOne}`);
+    console.log(`На какой высоте разбился второй образец: ${sumHeight2}`, `, попыток второго образца: ${stepModelTwo}`);
+    console.log(`Общее количество попыток обоих образцов ${totalStep}`);
+}
+
+console.log(getSafeHeight(99))
+
+/** 4 задача про пирожки
+
+ x = целое количество пирожков
+ 1 студент x/3 + 2, упростим (x+6) / 3
+ 2 студент x/4 + 3 => (x + 12) / 4
+ 3 студент x/5 + 8 => (x + 40) / 5
+ после чего остается 0 пирожков, т.е x - все пирожки студентов = 0
+ x - ((x+6) / 3) - ((x + 12) / 4) - (x + 40) / 5 = 0
+ Подведем все в одну дробь под общий знаменатель 3*4*5 = 60
+ ((60x) - (20 * (x+6)) - (15 * (x+12)) - (12 * (x + 40))) / 60 = 0
+ 13x - 780 = 0
+ x = 60
+ Ответ: изначально в столовой было 60 пирожков
  */
